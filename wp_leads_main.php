@@ -132,7 +132,7 @@
                     $this->start_controls_section(
                          'section_title_style',
                          [
-                              'label' => 'Title Style',
+                              'label' => 'Title',
                               'tab' => \Elementor\Controls_Manager::TAB_STYLE,
                          ]
                     );
@@ -157,7 +157,7 @@
                     $this->start_controls_section(
                          'section_desc_style',
                          [
-                              'label' => 'Desc Style',
+                              'label' => 'Desc',
                               'tab' => \Elementor\Controls_Manager::TAB_STYLE,
                          ]
                     );
@@ -204,30 +204,101 @@
                          ]
                     );
                     $this->end_controls_section();
+
+                    // user dependent breakpoint
+                    $this->start_controls_section(
+                         $this->add_responsive_control(
+                              'columns',
+                              [
+                                   'label' => esc_html__('Columns', 'text-domain'),
+                                   'type' => \Elementor\Controls_Manager::SELECT,
+                                   'default' => '3',
+                                   'options' => [
+                                        '1'  => '1 Column',
+                                        '2'  => '2 Columns',
+                                        '3'  => '3 Columns',
+                                        '4'  => '4 Columns',
+                                        '6'  => '6 Columns',
+                                   ],
+                                   'selectors' => [
+                                        '{{WRAPPER}} .your-card-wrapper' => 'grid-template-columns: repeat({{VALUE}}, 1fr); display: grid;',
+                                   ],
+                              ]
+                         )
+                    );
+                    $this->end_controls_section();
                }
+
+
+
+
+               // user depended 
+               //                $this->start_controls_section(
+               //                       'choose_breakpoint',
+               //                          [
+               //                               'label' => 'break point',
+               //                               'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+               //                          ]
+               //                );
+               //                $this->add_responsive_control(
+               //     'columns',
+               //     [
+               //         'label' => esc_html__( 'Columns', 'text-domain' ),
+               //         'type' => \Elementor\Controls_Manager::SELECT,
+               //         'default' => '3',
+               //         'options' => [
+               //             '1'  => '1 Column',
+               //             '2'  => '2 Columns',
+               //             '3'  => '3 Columns',
+               //             '4'  => '4 Columns',
+               //             '6'  => '6 Columns',
+               //         ],
+               //         'selectors' => [
+               //             '{{WRAPPER}} .your-card-wrapper' => 'grid-template-columns: repeat({{VALUE}}, 1fr); display: grid;',
+               //         ],
+               //     ]
+               // );
 
                // render use only for output
                protected function render()
                {
                     $settings = $this->get_settings_for_display();
 
-
-                    $image_url = !empty($settings['image']['url']) ? $settings['image']['url'] : '';
-
-                    // responsive cart
-
+                    // custom card
                     echo '<div class="card_group">';
-                    echo '<div class="custom-card">';
-                    if ($image_url) {
-                         echo '<div class="card-image"><img src="' . esc_url($image_url) . '" alt="card image"></div>';
+
+                    if (! empty($settings['list'])) {
+                         foreach ($settings['list'] as $item) {
+
+                              // get loop data from item data
+                              $image_url = !empty($item['image']['url']) ? $item['image']['url'] : '';
+                              $title     = !empty($item['title']) ? $item['title'] : '';
+                              $desc      = !empty($item['desc']) ? $item['desc'] : '';
+                              $btn_text  = !empty($item['btn']) ? $item['btn'] : '';
+
+                              echo '<div class="custom-card">';
+
+                              if ($image_url) {
+                                   echo '<div class="card-image"><img src="' . esc_url($image_url) . '" alt="card image"></div>';
+                              }
+
+                              echo '<div class="card-content">';
+                              if ($title) {
+                                   echo '<h3 class="card-title my-title">' . esc_html($title) . '</h3>';
+                              }
+                              if ($desc) {
+                                   echo '<p class="card-desc my-desc">' . esc_html($desc) . '</p>';
+                              }
+                              if ($btn_text) {
+                                   echo '<a href="#" class="card-btn">' . esc_html($btn_text) . '</a>';
+                              }
+                              echo '</div>'; // card-content end
+
+                              echo '</div>'; // custom-card end
+                         }
                     }
-                    echo '<div class="card-content">';
-                    echo '<h3 class="card-title my-title">' . esc_html($settings['title']) . '</h3>';
-                    echo '<p class="card-desc my-desc">' . esc_html($settings['desc']) . '</p>';
-                    echo '<a href="#" class="card-btn">' . esc_html($settings['btn']) . '</a>';
-                    echo '</div>';
-                    echo '</div>';
-                    echo '</div>';
+
+                    echo '</div>'; // card_group end
                }
           }
      }
