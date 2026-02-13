@@ -104,6 +104,11 @@
                          'type' => \Elementor\Controls_Manager::TEXT,
                          'default' => 'Hello World',
                     ]);
+                    $this->add_control('desc', [
+                         'label' => 'Desc',
+                         'type => \Elementor\Controls_Manager::TEXT',
+                         'default' => 'It has survived not only five centuries',
+                    ]);
 
                     // card image
                     $this->add_control('image', [
@@ -113,11 +118,16 @@
                               'url' => \Elementor\Utils::get_placeholder_image_src(),
                          ],
                     ]);
+                    // card btn
+                    $this->add_control('btn', [
+                         'label' => 'Btn',
+                         'type' => \Elementor\Controls_Manager::TEXT,
+                         'default' => 'read more'
+                    ]);
 
                     $this->end_controls_section(); // Content section shesh
 
-
-                    // style tab adding
+                    // style tab for title adding
 
                     $this->start_controls_section(
                          'section_title_style',
@@ -142,7 +152,57 @@
                               'selector' => '{{WRAPPER}} .my-title',
                          ]
                     );
+                    $this->end_controls_section();
+                    // style tab for desc
+                    $this->start_controls_section(
+                         'section_desc_style',
+                         [
+                              'label' => 'Desc Style',
+                              'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+                         ]
+                    );
 
+                    $this->add_control('desc_color', [
+                         'label' => 'Desc Color',
+                         'type' => \Elementor\Controls_Manager::COLOR,
+                         'selectors' => [
+                              '{{WRAPPER}} .my-desc' => 'color: {{VALUE}};',
+                         ],
+                    ]);
+
+                    $this->add_group_control(
+                         \Elementor\Group_Control_Typography::get_type(),
+                         [
+                              'name' => 'desc_typography',
+                              'selector' => '{{WRAPPER}} .my-desc',
+                         ]
+                    );
+                    $this->end_controls_section();
+
+                    // style tab for btn
+                    $this->start_controls_section(
+                         'section_btn_style',
+                         [
+                              'label' => 'Btn Style',
+                              'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+                         ]
+                    );
+
+                    $this->add_control('btn_color', [
+                         'label' => 'Btn Color',
+                         'type' => \Elementor\Controls_Manager::COLOR,
+                         'selectors' => [
+                              '{{WRAPPER}} .my-btn' => 'color: {{VALUE}};',
+                         ],
+                    ]);
+
+                    $this->add_group_control(
+                         \Elementor\Group_Control_Typography::get_type(),
+                         [
+                              'name' => 'btn_typography',
+                              'selector' => '{{WRAPPER}} .my-btn',
+                         ]
+                    );
                     $this->end_controls_section();
                }
 
@@ -162,9 +222,9 @@
                          echo '<div class="card-image"><img src="' . esc_url($image_url) . '" alt="card image"></div>';
                     }
                     echo '<div class="card-content">';
-                    echo '<h3 class="card-title">' . esc_html($settings['title']) . '</h3>';
-                    echo '<p class="card-desc">It has survived not only five centuries</p>';
-                    echo '<a href="#" class="card-btn">read more</a>';
+                    echo '<h3 class="card-title my-title">' . esc_html($settings['title']) . '</h3>';
+                    echo '<p class="card-desc my-desc">' . esc_html($settings['desc']) . '</p>';
+                    echo '<a href="#" class="card-btn">' . esc_html($settings['btn']) . '</a>';
                     echo '</div>';
                     echo '</div>';
                     echo '</div>';
